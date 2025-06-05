@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><title>Data Ingestor</title></head>
+<body>
+  <h1>Submit Ingestion</h1>
+  <form id="ingestForm">
+    <input type="text" placeholder="IDs (comma separated)" id="ids" />
+    <select id="priority">
+      <option value="HIGH">HIGH</option>
+      <option value="MEDIUM">MEDIUM</option>
+      <option value="LOW">LOW</option>
+    </select>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById("ingestForm").onsubmit = async function(e) {
+      e.preventDefault();
+      const ids = document.getElementById("ids").value.split(',').map(x => parseInt(x));
+      const priority = document.getElementById("priority").value;
+      const res = await fetch('/ingest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids, priority })
+      });
+      const data = await res.json();
+      alert('Ingestion ID: ' + data.ingestion_id);
+    }
+  </script>
+</body>
+</html>
